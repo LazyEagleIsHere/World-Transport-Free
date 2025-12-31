@@ -12,7 +12,7 @@ def hk_mtr():
   
   route = {
     "TKO line": [
-      "Po Lam", "Hang Hau", "TKO", "TKL", "KT", "Qurry Bay", "North Point"
+      "Po Lam", "Hang Hau", "TKO", "TKL", "KT", "Quarry Bay", "North Point"
     ]
   }
   
