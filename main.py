@@ -51,9 +51,9 @@ tko_line_stations_branched = {
   "TKO": ["Hang Hau", "LOHAS Park", "TKL"], 
   "LOHAS Park": ["TKO"], 
   "TKL": ["TKO", "Yau Tong"], 
-  "Yau Tong": ["TKL", "Qurry Bay"], 
+  "Yau Tong": ["TKL", "Quarry Bay"], 
   "Quarry Bay": ["Yau Tong", "North Point"], 
-  "North Point": ["Qurry Bay"]
+  "North Point": ["Quarry Bay"]
 }
 
 tko_line_stations_opened = {
