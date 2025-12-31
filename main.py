@@ -30,13 +30,18 @@ station_circle_radius = 15
 
 # --- TKO line ---
 
+tko_line_stations_name = {
+  "Po Lam", "Hang Hau", "TKO", "LOHAS Park", "TKL", "Yau Tong", "Quarry Bay", "North Point"
+}
+
 tko_line_stations_pos = {
   "Po Lam": (100, 100), 
   "Hang Hau": (100, 150), 
   "TKO": (150, 150), 
+  "LOHAS Park": (150, 200), 
   "TKL": (200, 150), 
-  "KT": (250, 150), 
-  "Qurry Bay": (250, 300), 
+  "Yau Tong": (250, 150), 
+  "Quarry Bay": (250, 300), 
   "North Point": (300, 300)
 }
 
@@ -44,9 +49,10 @@ tko_line_stations_branched = {
   "Po Lam": ["Hang Hau"], 
   "Hang Hau": ["Po Lam"], 
   "TKO": ["Hang Hau", "LOHAS Park", "TKL"], 
-  "TKL": ["TKO", "KT"], 
-  "KT": ["TKL", "Qurry Bay"], 
-  "Qurry Bay": ["KT", "North Point"], 
+  "LOHAS Park": ["TKO"], 
+  "TKL": ["TKO", "Yau Tong"], 
+  "Yau Tong": ["TKL", "Qurry Bay"], 
+  "Quarry Bay": ["Yau Tong", "North Point"], 
   "North Point": ["Qurry Bay"]
 }
 
@@ -54,9 +60,10 @@ tko_line_stations_opened = {
   "Po Lam": True, 
   "Hang Hau": False, 
   "TKO": False, 
+  "LOHAS Park": False, 
   "TKL": False, 
-  "KT": False,
-  "Qurry Bay": False, 
+  "Yau Tong": False,
+  "Quarry Bay": False, 
   "North Point": False
 }
 
@@ -73,7 +80,8 @@ def main():
   while running:
     screen.fill(black)
     
-    
+    for station_name in (tko_line_stations_name):
+      pygame.draw.circle(screen, white, tko_line_stations_pos[station_name], station_circle_radius)
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
