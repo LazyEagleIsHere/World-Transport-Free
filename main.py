@@ -81,7 +81,8 @@ def main():
     screen.fill(black)
     
     for station_name in (tko_line_stations_name):
-      pygame.draw.circle(screen, white, tko_line_stations_pos[station_name], station_circle_radius)
+      if tko_line_stations_opened[station_name]:
+        pygame.draw.circle(screen, white, tko_line_stations_pos[station_name], station_circle_radius)
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
