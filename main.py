@@ -6,8 +6,12 @@ from pygame.math import Vector2
 from text import *
 
 # --- HK Rails ---
+from HK import *
+
+# all
+from HK.branched_line import *
 # tko
-from HK import tko_line
+
 from HK.tko_line import *
 
 
@@ -38,31 +42,6 @@ font = pygame.font.Font(None, 36)
 
 station_circle_radius = 15
 
-
-# --- TKO Line ---
-
-
-# --- KT Line ---
-
-kt_line_stations_branches = {
-  
-}
-
-kt_line_stations_opened = {
-  "TKL", "Yau Tong", 
-  "Lam Tin", "KT", 
-  "Ngau Tau Kok", "Kowloon Bay", 
-  "Choi Hung", "Diamond Hill", 
-  "Wong Tai Sin", "Lok Fu", 
-  "Kowloon Tong", "Shek Kip Mei", 
-  "Prince Edward", "Mong Kok", 
-  "Yau Ma Tie", "Ho Man Tin", 
-  "Whampoa"
-}
-
-# --- East Rail Line ---
-
-
 # --- Camera Settings
 
 zoom = 1.0
@@ -75,18 +54,25 @@ def transform(pos):
   x, y = pos
   return int(x * zoom + offset_x), int(y * zoom + offset_y)
 
+
 def main():
   global zoom, offset_x, offset_y, dragging, last_mouse_pos
   running = True
   while running:
     screen.fill(black)
     
-    for station_name in (tko_line_stations_name):
-      if tko_line_stations_opened[station_name]:
-        for branch in (tko_line_stations_branches[station_name]):
-          pygame.draw.line(screen, tko_line_colour, transform(tko_line_stations_pos[station_name]), transform(tko_line_stations_pos[branch]), 5)
-          # pygame.draw.circle(screen, gray, tko_line_stations_pos[branch], station_circle_radius)
-        pygame.draw.circle(screen, white, transform(tko_line_stations_pos[station_name]), int(station_circle_radius * zoom))
+    # for station_name in (tko_line_stations_name):
+    #   if tko_line_stations_opened[station_name]:
+    #     for branch in (tko_line_stations_branches[station_name]):
+    #       pygame.draw.line(screen, tko_line_colour, transform(tko_line_stations_pos[station_name]), transform(tko_line_stations_pos[branch]), 5)
+    #       # pygame.draw.circle(screen, gray, tko_line_stations_pos[branch], station_circle_radius)
+    #     pygame.draw.circle(screen, white, transform(tko_line_stations_pos[station_name]), int(station_circle_radius * zoom))
+    
+    for name in (station_name):
+      if station_opened[name]:
+        for branch in (stations_branches[name]):
+          pygame.draw.line(screen, gray, transform(stations_pos[name]), transform(stations_pos[branch]), 5)
+        pygame.draw.circle(screen, white, transform(stations_pos[name]), int(station_circle_radius * zoom))
     
     mouse_pos = pygame.mouse.get_pos()
     
