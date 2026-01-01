@@ -132,8 +132,21 @@ def main():
           # pygame.draw.circle(screen, gray, tko_line_stations_pos[branch], station_circle_radius)
         pygame.draw.circle(screen, white, transform(tko_line_stations_pos[station_name]), int(station_circle_radius * zoom))
     
+    mouse_pos = pygame.mouse.get_pos()
     
     zoom_in_button = pygame.Rect(10, 10, 50, 50)
+    
+    if zoom_in_button.collidepoint(mouse_pos):
+      write(screen, zoom_in_button, "+", 65, "black", "gray69", 10)
+    else:
+      write(screen, zoom_in_button, "+", 65, "black", "white", 10)
+    
+    zoom_out_button = pygame.Rect(65, 10, 50, 50)
+    
+    if zoom_out_button.collidepoint(mouse_pos):
+      write(screen, zoom_out_button, "-", 65, "black", "gray69", 10)
+    else:
+      write(screen, zoom_out_button, "-", 65, "black", "white", 10)
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -174,7 +187,14 @@ def main():
         # Mouse Drag
         # start
         elif event.type == pygame.MOUSEBUTTONDOWN:
-          if event.button == 1: # left click
+          # Press button zooming
+          if zoom_in_button.collidepoint(mouse_pos):
+            zoom *= 1.1
+          elif zoom_out_button.collidepoint(mouse_pos):
+            zoom /= 1.1
+          
+          # Mouse move
+          elif event.button == 1 and not(zoom_in_button.collidepoint(mouse_pos) or zoom_out_button.collidepoint(mouse_pos)): # left click
             dragging = True
             last_mouse_pos = event.pos
         
@@ -190,7 +210,7 @@ def main():
             dy = event.pos[1] - last_mouse_pos[1]
             offset_x += dx
             offset_y += dy
-            last_mouse_pos = event.pos        
+            last_mouse_pos = event.pos          
   
     pygame.display.flip()
     clock.tick(fps)
