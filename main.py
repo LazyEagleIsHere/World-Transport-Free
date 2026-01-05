@@ -40,7 +40,7 @@ pygame.display.set_caption('W-T-F')
 font = pygame.font.Font(None, 36)
 
 
-station_circle_radius = 15
+station_circle_radius = 10
 
 # --- Camera Settings
 
@@ -71,6 +71,7 @@ def main():
     for name in (station_name):
       if station_opened[name]:
         for branch in (stations_branches[name]):
+          # print("E")
           pygame.draw.line(screen, gray, transform(stations_pos[name]), transform(stations_pos[branch]), 5)
         pygame.draw.circle(screen, white, transform(stations_pos[name]), int(station_circle_radius * zoom))
     
