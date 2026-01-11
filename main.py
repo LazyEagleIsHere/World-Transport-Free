@@ -10,10 +10,9 @@ from HK import *
 
 # all
 from HK.branched_line import *
-# tko
 
-from HK.tko_line import *
-
+# --- Trains ---
+from trains import *
 
 
 
@@ -54,6 +53,7 @@ def transform(pos):
   x, y = pos
   return int(x * zoom + offset_x), int(y * zoom + offset_y)
 
+
 def draw(name, pos, r, labels_drawn):
   size = max(12, min(int(36 * zoom), 72))
   font = pygame.font.Font(None, size)
@@ -90,7 +90,9 @@ def draw(name, pos, r, labels_drawn):
 def main():
   global zoom, offset_x, offset_y, dragging, last_mouse_pos, money, trains
   money = 3000
-  trains = ["Steamer"]
+  trains = [
+    "Steamer", 
+  ]
   running = True
   last_station_pressed = []
   while running:
