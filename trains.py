@@ -10,6 +10,7 @@ train_types = {
   "Photon", 
   
   # Red Pao Series
+  "Tiny Red Pao", 
   "Small Red Pao", 
   "Medium Red Pao", 
   "Big Red Pao", 
@@ -27,9 +28,11 @@ trains_info = {
   "Magnetic Heavy": {"fuel": 3000, "engines": 3, "fuel car": 3, "speed": 170, "jobs": 16, "parts": 10}, 
   "Quantum": {"fuel": 4000, "engines": 1, "fuel car": 1, "speed": 250, "jobs": 20, "parts": 15}, 
   "Photon": {"fuel": 4000, "engines": 1, "fuel car": 2, "speed": 250, "jobs": 15, "parts": 15}, 
+  
+  "Tiny Red Pao": {"fuel": 1000, "engines": 1, "fuel car": 1, "speed": 130, "jobs": 10, "parts": 12}, 
   "Small Red Pao": {"fuel": 1500, "engines": 1, "fuel car": 1, "speed": 150, "jobs": 10, "parts": 12}, 
-  "Medium Red Pao": {"fuel": 1750, "engines": 1, "fuel car": 2, "speed": 160, "jobs": 10, "parts": 12}, 
-  "Big Red Pao": {"fuel": 1750, "engines": 2, "fuel car": 1, "speed": 160, "jobs": 10, "parts": 12}, 
+  "Medium Red Pao": {"fuel": 1750, "engines": 1, "fuel car": 2, "speed": 170, "jobs": 10, "parts": 12}, 
+  "Big Red Pao": {"fuel": 1750, "engines": 2, "fuel car": 1, "speed": 180, "jobs": 10, "parts": 12}, 
   "Gigantic Red Pao": {"fuel": 2000, "engines": 2, "fuel car": 2, "speed": 200, "jobs": 10, "parts": 12}, 
   "Mushroom Bouncer": {"fuel": 2500, "engines": 2, "fuel car": 1, "speed": 160, "jobs": 13, "parts": 5}, 
   "Mosquito Heavy": {"fuel": 5000, "engines": 1, "fuel car": 3, "speed": 160, "jobs": 20, "parts": 13}, 
@@ -39,12 +42,13 @@ normal_trains = {
   "Steamer", 
   "Polar", 
   "Magnetic", 
+  "Tiny Red Pao", 
   "Small Red Pao", 
   "Medium Red Pao", 
-  "Big Red Pao", 
 }
 
 special_trains = {
+  "Big Red Pao", 
   "Gigantic Red Pao", 
   "Magnetic Heavy", 
   "Quantum", 
