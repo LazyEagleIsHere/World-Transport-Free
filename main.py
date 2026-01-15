@@ -30,6 +30,8 @@ red = (255, 0, 0)
 gray = (200, 200, 200)
 orange = (255, 165, 0)
 light_blue = (173, 116, 233)
+blue = (0, 0, 200)
+green = (0, 100, 0)
 
 # --- Rails Colour
 tko_line_colour = (100, 0, 100)
@@ -44,7 +46,8 @@ station_circle_radius = 10
 # --- Camera Settings
 
 zoom = 1.0
-offset_x, offset_y = -(width // 10), -(height // 20)
+# offset_x, offset_y = -(width // 100000), -(height // 100)
+offset_x, offset_y = 450, 0
 dragging = False
 last_mouse_pos = (0, 0)
 
@@ -87,16 +90,54 @@ def draw(name, pos, r, labels_drawn):
   labels_drawn.append(text_rect)
 
 
+def train_page():
+  running = True
+  while running:
+    screen.fill(black)
+
+    mouse_pos = pygame.mouse.get_pos()
+    
+    home_button_size = (100, 100)
+    home_button_pos = (width - home_button_size[0], height - home_button_size[1])
+    home_button = pygame.Rect(home_button_pos, home_button_size)
+    write(screen, home_button, 'X', 65, "black", "gray69" if home_button.collidepoint(mouse_pos) else "white", 10)
+    
+    trains_block_spacing = 10
+    train_button_size = (width, 100)
+    trains_cnt = 0
+    for name in trains:
+      train_button_pos = (0, train_button_size[1] * trains_cnt)
+      trains_cnt += 1
+      trains_button = pygame.Rect(train_button_pos, train_button_size)
+      write(screen, trains_button, f"{name}    Fuel: {trains[name]["fuel"]}", 65, "black", "gray69" if trains_button.collidepoint(mouse_pos) else "white", 10)
+      # pygame.draw.rect(screen, gray, (int(bottom_block_pos[0]), int(bottom_block_pos[1]), bottom_block_size[0], bottom_block_size[1]))
+    
+    for event in pygame.event.get():
+      if event.type == pygame.QUIT:
+        running = False
+        pygame.quit()
+        sys.exit()
+      elif event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_ESCAPE:
+          running = False
+          pygame.quit()
+          sys.exit()
+      elif event.type == pygame.MOUSEBUTTONDOWN:
+        if home_button.collidepoint(mouse_pos):
+          running = False
+    
+    pygame.display.flip()
+
 def main():
   global zoom, offset_x, offset_y, dragging, last_mouse_pos, money, trains
   money = 3000
-  trains = [
-    "Steamer", 
-  ]
+  trains = {
+    "Steamer": {"pos": "", "engines": 1, "fuel car": 0, "run": False, "fuel": 1000}, 
+  }
   running = True
   last_station_pressed = []
   while running:
-    screen.fill(black)
+    screen.fill(green)
 
     # for station_name in (tko_line_stations_name):
     #   if tko_line_stations_opened[station_name]:
@@ -107,18 +148,25 @@ def main():
     
     mouse_pos = pygame.mouse.get_pos()
     
-    zoom_in_button = pygame.Rect(10, 10, 50, 50)
+    button_spacing = 55
+    button_size = (50, 50)
     
+    
+    zoom_in_button_pos = (10, 10)
+    zoom_in_button = pygame.Rect(zoom_in_button_pos, button_size)
     write(screen, zoom_in_button, '+', 65, "black", "gray69" if zoom_in_button.collidepoint(mouse_pos) else "white", 10)
     
-    zoom_out_button = pygame.Rect(65, 10, 50, 50)
-    
+    zoom_out_button_pos = (zoom_in_button_pos[0] + button_spacing, zoom_in_button_pos[1])
+    zoom_out_button = pygame.Rect(zoom_out_button_pos, button_size)
     write(screen, zoom_out_button, '-', 65, "black", "gray69" if zoom_out_button.collidepoint(mouse_pos) else "white", 10)
     
-    reverse_button = pygame.Rect(65 + 55, 10, 50, 50)
-    
+    reverse_button_pos = (zoom_out_button_pos[0] + button_spacing, zoom_in_button_pos[1])
+    reverse_button = pygame.Rect(reverse_button_pos, button_size)
     write(screen, reverse_button, '<--', 65, "black", "gray69" if reverse_button.collidepoint(mouse_pos) else "white", 10)
     
+    rezoom_button_pos = (reverse_button_pos[0] + button_spacing, zoom_in_button_pos[1])
+    rezoom_button = pygame.Rect(rezoom_button_pos, button_size)
+    write(screen, rezoom_button, 'e', 65, "black", "gray69" if rezoom_button.collidepoint(mouse_pos) else "white", 10)
     
     ordered_stations = sorted(station_name, key = lambda n: (stations_pos[n][0], stations_pos[n][1]))
     
@@ -146,8 +194,8 @@ def main():
         pos = transform(stations_pos[name])
         r = int(station_circle_radius * zoom)
         pygame.draw.circle(screen, white, pos, r)
-        draw(name, pos, r, labels_drawn)
-        drawn_stations.add(name)
+        # draw(name, pos, r, labels_drawn)
+        # drawn_stations.add(name)
     
     for name in ordered_stations:
       if station_opened[name]:
@@ -157,8 +205,8 @@ def main():
             r_branch = int(station_circle_radius * zoom)
             colour = white if station_opened[branch] else gray
             pygame.draw.circle(screen, colour, pos_branch, r_branch)
-            draw(branch, pos_branch, r_branch, labels_drawn)
-            drawn_stations.add(branch)
+            # draw(branch, pos_branch, r_branch, labels_drawn)
+            # drawn_stations.add(branch)
     
     # for name in (station_name):
     #   if station_opened[name]:
@@ -180,8 +228,38 @@ def main():
         
     #     # station name
     #     draw(name, pos, r, labels_drawn)
-        
+
+    
+    # --- Outlook ---
+    
+    # money += 5000
+    
+    bottom_block_size = (width, 100)
+    bottom_block_pos = (0, height - bottom_block_size[1])
+    pygame.draw.rect(screen, gray, (int(bottom_block_pos[0]), int(bottom_block_pos[1]), bottom_block_size[0], bottom_block_size[1]))
+    
+    info_y = bottom_block_pos[1] + 50
+    info_spacing = 75
+    
+    money_text = font.render(f"${money}", True, black)
+    money_rect = money_text.get_rect(topleft = (10 + info_spacing, info_y))
+    pygame.draw.rect(screen, white, money_rect.inflate(10, 10))
+    screen.blit(money_text, money_rect)
+    
+    menu_button = pygame.Rect(width - 250, bottom_block_pos[1] + 25, len("Settings") * 25, 50)
+    write(screen, menu_button, "Menu", 65, "black", "gray69" if menu_button.collidepoint(mouse_pos) else "yellow", 10)
+    
+    all_trains_button = pygame.Rect(width - 100, 10, 50, 50)
+    cnt = 0
+    for name in trains:
+      if not trains[name]["run"]:
+        cnt += 1
+    write(screen, all_trains_button, str(cnt), 65, "black", "gray69" if all_trains_button.collidepoint(mouse_pos) else "yellow", 10)
+    
+    
     buttons_movements = 50
+    
+    zoom_range = (2, 0.7)
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -194,9 +272,9 @@ def main():
         
           # --- Zooming (Keyboard) ---
           elif event.key == pygame.K_EQUALS or event.key == pygame.K_PLUS:
-            zoom *= 1.1
+            zoom = min(zoom_range[0], zoom * 1.1)
           elif event.key == pygame.K_MINUS:
-            zoom /= 1.1              
+            zoom = max(zoom_range[1], zoom / 1.1)
           
           # --- Screen Movements (Keyboard) ---
           elif event.key == pygame.K_LEFT:
@@ -213,9 +291,9 @@ def main():
         # Mouse Wheel
         elif event.type == pygame.MOUSEWHEEL:
           if event.y > 0: # scroll up
-            zoom *= 1.1
+            zoom = min(zoom_range[0], zoom * 1.1)
           elif event.y < 0: # scroll down
-            zoom /= 1.1
+            zoom = max(zoom_range[1], zoom / 1.1)
 
         # --- Screen Movements (Mouse) ---
         
@@ -224,9 +302,9 @@ def main():
         elif event.type == pygame.MOUSEBUTTONDOWN:
           # Press button zooming
           if zoom_in_button.collidepoint(mouse_pos):
-            zoom *= 1.1
+            zoom = min(zoom_range[0], zoom * 1.1)
           elif zoom_out_button.collidepoint(mouse_pos):
-            zoom /= 1.1
+            zoom = max(zoom_range[1], zoom / 1.1)
           elif reverse_button.collidepoint(mouse_pos):
             print("EEEE")
             for var in last_station_pressed:
@@ -235,6 +313,14 @@ def main():
               last = last_station_pressed.pop()
               station_opened[last] = False
               print(last)
+          elif all_trains_button.collidepoint(mouse_pos):
+            train_page()
+          elif rezoom_button.collidepoint(mouse_pos):
+            zoom = 1.0
+            # offset_x, offset_y = -(width // 100000), -(height // 100)
+            offset_x, offset_y = 450, 0
+            dragging = False
+            last_mouse_pos = (0, 0)
           else:
             # for name in station_name:
             #   if station_opened[name]:
@@ -276,7 +362,14 @@ def main():
                     break
           
             # Mouse move
-            if event.button == 1 and not(zoom_in_button.collidepoint(mouse_pos) or zoom_out_button.collidepoint(mouse_pos) or reverse_button.collidepoint(mouse_pos)): # left click
+            if event.button == 1 and not(
+              zoom_in_button.collidepoint(mouse_pos) or 
+              zoom_out_button.collidepoint(mouse_pos) or 
+              reverse_button.collidepoint(mouse_pos) or 
+              all_trains_button.collidepoint(mouse_pos) or 
+              menu_button.collidepoint(mouse_pos) or 
+              rezoom_button.collidepoint(mouse_pos)
+            ): # left click
               dragging = True
               last_mouse_pos = event.pos
           
